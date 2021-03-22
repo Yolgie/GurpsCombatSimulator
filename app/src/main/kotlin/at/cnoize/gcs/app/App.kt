@@ -1,8 +1,11 @@
 package at.cnoize.gcs.app
 
+import kotlin.random.Random
+import kotlin.random.nextInt
+
 @Suppress(
         "MagicNumber", // remove and extract into settings or so
-        "UnusedPrivateMember", "kotlin:S1481", "UNUSED_VARIABLE", // ignore for the time being until some more code is added
+        "UnusedPrivateMember", "kotlin:S1481", "UNUSED_VARIABLE", // ignore until some more code is added
 )
 fun main() {
     println("Hello GURPS!")
@@ -19,6 +22,10 @@ fun main() {
     val playerOneWithAxe = CharacterWieldingWeapon(playerOne, axe)
     val damageWithAxe = playerOneWithAxe.getDamage()
 
-    print("Player one attacks player two with an axe and does $damageWithAxe damage")
-    // hit playerTwo with playerOne, wielding an axe
+    val damageToPlayerTwo = with(FixedRollProviderService(3)) { damageWithAxe.roll() }
+    println("Player one attacks player two with an axe and does $damageWithAxe damage (=$damageToPlayerTwo)")
+    val newPlayerTwoState = playerTwoInitialState.run { copy(hp = hp-damageToPlayerTwo) }
+
+    println("Player two initial state: $playerTwoInitialState")
+    println("Player two final state: $newPlayerTwoState")
 }

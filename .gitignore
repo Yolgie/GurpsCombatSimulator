@@ -2,6 +2,9 @@
 .idea/
 out/
 
+# CodeStyle Settings
+!.idea/codeStyles/
+
 *.iml
 *.ipr
 *.iws

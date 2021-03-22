@@ -12,13 +12,17 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation(platform(kotlin("bom")))
+    implementation(kotlin("stdlib-jdk8"))
 
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+    testImplementation(kotlin("test-junit5"))
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.0.0")
 }
 
 application {
     mainClass.set("at.cnoize.gcs.app.AppKt")
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

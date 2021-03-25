@@ -1,4 +1,6 @@
-package at.cnoize.gcs.app
+package at.cnoize.gcs.app.weapons
+
+import at.cnoize.gcs.app.Dice
 
 enum class AttackMode {
     Swing,

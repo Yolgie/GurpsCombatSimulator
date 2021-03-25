@@ -1,31 +1,91 @@
 package at.cnoize.gcs.app
 
-import kotlin.random.Random
-import kotlin.random.nextInt
+import at.cnoize.gcs.app.weapons.Weapon
+import at.cnoize.gcs.app.weapons.WeaponMode
+import at.cnoize.gcs.app.weapons.axe
+import at.cnoize.gcs.app.weapons.mace
+import at.cnoize.util.takeWhileInclusive
 
 @Suppress(
-        "MagicNumber", // remove and extract into settings or so
-        "UnusedPrivateMember", "kotlin:S1481", "UNUSED_VARIABLE", // ignore until some more code is added
+    "MagicNumber", // remove and extract into settings or so
 )
 fun main() {
     println("Hello GURPS!")
 
-    val axe = Weapon(listOf(WeaponMode(MeleeDamage(AttackMode.Swing, +2), DamageMode.Cutting)))
-    val mace = Weapon(listOf(WeaponMode(MeleeDamage(AttackMode.Swing, +3), DamageMode.Crushing)))
-    val pick = Weapon(listOf(WeaponMode(MeleeDamage(AttackMode.Swing, +1), DamageMode.Impaling)))
+    val playerOne = Character("Player 1", 10, 11, 10, 10)
+    val playerOneInitialState = playerOne.getInitialPlayerState()
+    val playerOneWithWeapon = playerOneInitialState.copy(weapons = listOf(axe))
+    val playerTwo = Character("Player 2", 12, 10, 10, 10)
+    val playerTwoInitialState = playerTwo.getInitialPlayerState()
+    val playerTwoWithWeapon = playerTwoInitialState.copy(weapons = listOf(mace))
 
-    val playerOne = Character(10, 11, 10, 10, HP = 12)
-    val playerOneInitialState = playerOne.getPlayerState()
-    val playerTwo = Character(12, 10, 10, 10, FP = 12)
-    val playerTwoInitialState = playerTwo.getPlayerState()
+    val combatPairingFirstRound = CombatPairing(attacker = playerOneWithWeapon, defender = playerTwoWithWeapon)
 
-    val playerOneWithAxe = CharacterWieldingWeapon(playerOne, axe)
-    val damageWithAxe = playerOneWithAxe.getDamage()
+    val combat = generateSequence(seed = combatPairingFirstRound) { combatPairing ->
+        val result = attack(
+            combatPairing,
+            combatPairing.attacker.weapons.first(),
+            combatPairing.attacker.weapons.first().modes.first()
+        )
+        return@generateSequence result.switch()
+    }
 
-    val damageToPlayerTwo = with(FixedRollProviderService(3)) { damageWithAxe.roll() }
-    println("Player one attacks player two with an axe and does $damageWithAxe damage (=$damageToPlayerTwo)")
-    val newPlayerTwoState = playerTwoInitialState.run { copy(hp = hp-damageToPlayerTwo) }
+    val (winner, looser) = combat
+        .takeWhileInclusive { combatPairing -> combatPairing.attacker.hp > 0 && combatPairing.defender.hp > 0 }
+        .last()
 
-    println("Player two initial state: $playerTwoInitialState")
-    println("Player two final state: $newPlayerTwoState")
+    println("${winner.character.name} is the winner with ${winner.hp} vs. ${looser.hp}")
+}
+
+fun attack(
+    combatPairing: CombatPairing,
+    weapon: Weapon,
+    weaponMode: WeaponMode
+): CombatPairing {
+    val attacker = combatPairing.attacker
+    var defender = combatPairing.defender
+
+    println("${attacker.character.name} attacks ${defender.character.name} with ${weapon.name}")
+    val attackRoll = Dice().roll()
+    val attackSuccess = attackRoll <= attacker.character.primaryWeaponSkill
+    println(
+        "${attacker.character.name} rolls $attackRoll " +
+                "on ${attacker.character.primaryWeaponSkill} " +
+                "and would ${if (!attackSuccess) "not " else ""}hit."
+    )
+
+    if (attackSuccess) {
+        val defenseRoll = Dice().roll()
+        val defenseSuccess = defenseRoll <= defender.character.defenseRollTarget
+        println(
+            "${defender.character.name} rolls $defenseRoll " +
+                    "on ${defender.character.defenseRollTarget} " +
+                    "and would ${if (!defenseSuccess) "not " else ""}defend."
+        )
+
+        if (!defenseSuccess) {
+            // add validation that the weapon mode is possible (weapon active)
+            val attackDice = with(weaponMode) { attacker.character.toDamageDice() }
+            val damageRoll = attackDice.roll()
+            val penetratingDamage = damageRoll
+            val modifiedDamage = damageRoll
+            val defenderNewHp = defender.hp - modifiedDamage
+            println(
+                "${attacker.character.name} rolls $damageRoll ($attackDice) " +
+                        "resulting in $penetratingDamage damage getting through, " +
+                        "modified to $modifiedDamage. " +
+                        "${defender.character.name} now has $defenderNewHp HP left."
+            )
+
+            defender = defender.copy(hp = defenderNewHp)
+        }
+    }
+    println("The turn is over.")
+    println()
+
+    return CombatPairing(attacker, defender)
+}
+
+data class CombatPairing(val attacker: CharacterState, val defender: CharacterState) {
+    fun switch() = CombatPairing(attacker = defender, defender = attacker)
 }

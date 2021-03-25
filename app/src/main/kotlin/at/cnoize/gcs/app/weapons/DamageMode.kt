@@ -1,4 +1,4 @@
-package at.cnoize.gcs.app
+package at.cnoize.gcs.app.weapons
 
 enum class DamageMode {
     Cutting,

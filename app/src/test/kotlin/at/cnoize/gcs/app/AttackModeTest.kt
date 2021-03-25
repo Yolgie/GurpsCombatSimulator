@@ -1,5 +1,7 @@
 package at.cnoize.gcs.app
 
+import at.cnoize.gcs.app.weapons.AttackMode
+import at.cnoize.gcs.app.weapons.getDamageDice
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.test.assertFails

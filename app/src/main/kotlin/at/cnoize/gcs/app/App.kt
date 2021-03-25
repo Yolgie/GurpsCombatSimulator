@@ -3,13 +3,16 @@ package at.cnoize.gcs.app
 import at.cnoize.gcs.app.weapons.Weapon
 import at.cnoize.gcs.app.weapons.WeaponMode
 import at.cnoize.gcs.app.weapons.axe
-import at.cnoize.gcs.app.weapons.mace
 import at.cnoize.util.takeWhileInclusive
+import java.util.logging.Logger
 
 @Suppress(
     "MagicNumber", // remove and extract into settings or so
 )
 fun main() {
+    val log = Logger.getLogger("GurpsCombatSimulator App")
+
+    log.info("Hello Logger!")
     println("Hello GURPS!")
 
     val playerOne = Character("Player 1", 10, 11, 10, 10)
@@ -17,24 +20,33 @@ fun main() {
     val playerOneWithWeapon = playerOneInitialState.copy(weapons = listOf(axe))
     val playerTwo = Character("Player 2", 12, 10, 10, 10)
     val playerTwoInitialState = playerTwo.getInitialPlayerState()
-    val playerTwoWithWeapon = playerTwoInitialState.copy(weapons = listOf(mace))
+    val playerTwoWithWeapon = playerTwoInitialState.copy(weapons = listOf(axe))
 
     val combatPairingFirstRound = CombatPairing(attacker = playerOneWithWeapon, defender = playerTwoWithWeapon)
 
-    val combat = generateSequence(seed = combatPairingFirstRound) { combatPairing ->
-        val result = attack(
-            combatPairing,
-            combatPairing.attacker.weapons.first(),
-            combatPairing.attacker.weapons.first().modes.first()
-        )
-        return@generateSequence result.switch()
+    val result = (1..10000).map {
+        val combat = generateSequence(seed = combatPairingFirstRound) { combatPairing ->
+            val result = attack(
+                combatPairing,
+                combatPairing.attacker.weapons.first(),
+                combatPairing.attacker.weapons.first().modes.first()
+            )
+            return@generateSequence result.switch()
+        }
+
+        val (looser, winner) = combat
+            .takeWhileInclusive { combatPairing -> combatPairing.attacker.hp > 0 && combatPairing.defender.hp > 0 }
+            .last()
+
+        println("${winner.character.name} is the winner with ${winner.hp} vs. ${looser.hp}")
+        println("###################################")
+        println()
+
+        winner.character
     }
+        .groupingBy { it.name }.eachCount()
 
-    val (winner, looser) = combat
-        .takeWhileInclusive { combatPairing -> combatPairing.attacker.hp > 0 && combatPairing.defender.hp > 0 }
-        .last()
-
-    println("${winner.character.name} is the winner with ${winner.hp} vs. ${looser.hp}")
+    println(result.toSortedMap())
 }
 
 fun attack(

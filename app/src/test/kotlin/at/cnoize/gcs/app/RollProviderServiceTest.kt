@@ -3,6 +3,7 @@ package at.cnoize.gcs.app
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -29,5 +30,11 @@ class RollProviderServiceTest {
                 assertEquals(dice, fixedRollProvider.singleDieRoll())
             }
         }
+    }
+
+    @Test
+    fun `test fixedRollProviderService throws on init with invalid result`() {
+        assertThrows<IllegalArgumentException> { FixedRollProviderService(Dice.minValue - 1) }
+        assertThrows<IllegalArgumentException> { FixedRollProviderService(Dice.maxValue + 1) }
     }
 }

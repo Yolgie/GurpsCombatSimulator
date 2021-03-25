@@ -15,7 +15,7 @@ data class Character(
     val HT: Int,
     val HP: Int = ST,
     val FP: Int = HT,
-    val primaryWeaponSkill: Int = DX - 1,
+    val primaryWeaponSkill: Int = DX,
     val defenseRollTarget: Int = primaryWeaponSkill / 2 + 3
 ) {
     fun getInitialPlayerState(): CharacterState {

@@ -3,11 +3,21 @@ package at.cnoize.gcs.app
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import kotlin.random.Random
 import kotlin.test.assertEquals
 
 class DiceTest {
+
+    @Nested
+    inner class `Dice used are 6 sided dice` {
+        @Test
+        fun `Dice faces contains exactly numbers 1-6`() {
+            assertEquals(setOf(1, 2, 3, 4, 5, 6), Dice.faces.toSet())
+        }
+    }
+
     @Nested
     inner class `Optional Rule for Modifying Dice + Adds (B269)` {
         // add tests

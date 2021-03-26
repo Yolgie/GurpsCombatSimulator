@@ -1,5 +1,4 @@
-[![GitHub Super-Linter](https://github.com/yolgie/GurpsCombatSimulator/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
-
+[![GitHub Super-Linter](https://github.com/yolgie/GurpsCombatSimulator/workflows/Github%20Super%20Linter/badge.svg?branch=main)](https://github.com/marketplace/actions/super-linter) ![Gradle Build](https://github.com/yolgie/GurpsCombatSimulator/workflows/Gradle%20Build/badge.svg?branch=main)
 
 # GURPS Combat Simulator
 

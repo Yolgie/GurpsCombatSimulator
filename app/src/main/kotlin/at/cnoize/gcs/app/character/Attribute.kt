@@ -31,6 +31,5 @@ enum class SecondaryCharacteristic(val derivingFunction: (Character) -> Int) : A
     BasicMove({ character -> character.get(BasicSpeed100) / 100 }),
 
     // ignores special case of BasicLift being less than 10lbs
-    BasicLift({ character -> character.get(ST) * character.get(ST) / 5 }),
-    // todo think about migrating AttackMode to a SecondaryCharacteristic, but the result is Dice instead of Int...
+    BasicLift({ character -> character.get(ST) * character.get(ST) / 5 })
 }

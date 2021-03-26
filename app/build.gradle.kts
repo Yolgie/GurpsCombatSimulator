@@ -3,6 +3,7 @@ plugins {
     application
     idea
 
+    id("org.sonarqube") version "3.1.1"
     id("io.gitlab.arturbosch.detekt") version "1.16.0"
 }
 
@@ -30,4 +31,12 @@ tasks.withType<Test> {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions.jvmTarget = "11"
+}
+
+sonarqube {
+    properties {
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.projectKey", "GurpsCombatSimulator")
+        property("sonar.organization", "yolgie")
+    }
 }

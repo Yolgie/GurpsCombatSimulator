@@ -2,7 +2,7 @@
 
 package at.cnoize.gcs.app.weapons
 
-import at.cnoize.gcs.app.skills.Skill
+import at.cnoize.gcs.app.character.skills.Skill
 
 val axe = Weapon(
     "Axe",

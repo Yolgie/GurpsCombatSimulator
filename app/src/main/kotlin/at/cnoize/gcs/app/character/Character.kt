@@ -14,8 +14,8 @@ import at.cnoize.gcs.app.weapons.WeaponState
 )
 data class Character(
     val name: String,
-    val attributes: Map<Attribute, Int>,
-    val skills: Map<Skill, Int>,
+    val attributes: Map<Attribute, Int> = emptyMap(),
+    val skills: Map<Skill, Int> = emptyMap(),
 ) {
     fun get(attribute: BasicAttribute): Int {
         return attributes[attribute]

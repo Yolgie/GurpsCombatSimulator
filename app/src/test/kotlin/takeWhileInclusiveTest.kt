@@ -3,7 +3,7 @@ package at.cnoize.util
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class takeWhileInclusiveTest {
+class TakeWhileInclusiveTest {
 
     val data = listOf(0, 1, 2, 3, 4, 5)
     val predicateElement = 3 // this will result in the list containing the first element where the condition fails -> 3
@@ -165,8 +165,4 @@ class takeWhileInclusiveTest {
 
         assertEquals(expectedResult, result)
     }
-
-
-
-//    fun <T> testTakeWhileInclusive()
 }

@@ -8,11 +8,7 @@ interface RollProviderService {
     fun singleDieRoll(): Int
 
     fun Dice.roll(): Int {
-        return nTimes(this.count) { singleDieRoll() } + mod
-    }
-
-    private fun nTimes(n: Int, transform: () -> Int): Int {
-        return (1..n).map { transform.invoke() }.sum()
+        return List(this.count) { singleDieRoll() }.sum()
     }
 }
 

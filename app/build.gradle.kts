@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version "1.4.30"
     application
     idea
+    jacoco
 
     id("org.sonarqube") version "3.1.1"
     id("io.gitlab.arturbosch.detekt") version "1.16.0"
@@ -19,6 +20,7 @@ dependencies {
     testImplementation(kotlin("test-junit5"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+    testImplementation("io.mockk:mockk:1.10.6")
 }
 
 application {
@@ -27,6 +29,14 @@ application {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.isEnabled = true
+    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

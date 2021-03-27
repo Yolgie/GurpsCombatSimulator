@@ -10,7 +10,12 @@ enum class Skill : DefaultFrom {
     Knife,
     Spear,
     TwoHandedAxeMace,
-    Shield
+    Shield,
+    Brawling,
+    Boxing,
+    Karate,
+    Judo,
+    Wrestling
 }
 
 val SkillDefaults: Map<Skill, Map<DefaultFrom, Int>> = mapOf(

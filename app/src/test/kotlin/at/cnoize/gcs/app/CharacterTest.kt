@@ -47,7 +47,6 @@ class CharacterTest {
         val defaultFromSkill = Skill.Brawling as DefaultFrom
         val defaultFromSkillWithoutDefault = Skill.Karate as DefaultFrom
 
-
         assertEquals(Character.defaultAttributeLevel, basicCharacter.get(defaultFromAttribute))
         assertEquals(Character.defaultAttributeLevel, basicCharacter.get(defaultFromCharacteristic))
         assertEquals(Character.defaultAttributeLevel, basicCharacter.get(defaultFromSkill))

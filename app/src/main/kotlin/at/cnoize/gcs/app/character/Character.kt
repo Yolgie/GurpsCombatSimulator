@@ -77,10 +77,10 @@ data class CharacterState(
     }
 
     @Suppress("MagicNumber") // rules
-    fun getActiveDefense(activeDefense: ActiveDefense) : Int? {
+    fun getActiveDefense(activeDefense: ActiveDefense): Int? {
         // currently completely ignoring multiple defense restrictions/modifiers
         return when (activeDefense) {
-            ActiveDefense.Dodge -> character.get(SecondaryCharacteristic.BasicSpeedNoFractions)+3-encumbrance
+            ActiveDefense.Dodge -> character.get(SecondaryCharacteristic.BasicSpeedNoFractions) + 3 - encumbrance
             ActiveDefense.Parry -> activeWeapons
                 .filter { activeWeapon -> activeWeapon.state == WeaponState.Ready }
                 .flatMap { activeWeapon -> activeWeapon.weapon.modes }

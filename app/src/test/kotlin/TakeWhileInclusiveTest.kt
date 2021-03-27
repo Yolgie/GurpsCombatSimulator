@@ -9,7 +9,6 @@ class TakeWhileInclusiveTest {
     val predicateElement = 3 // this will result in the list containing the first element where the condition fails -> 3
     val expectedList = listOf(0, 1, 2, 3)
 
-
     @Test
     fun `test takeWhileInclusive TypedArray`() {
         val array = data.toTypedArray()

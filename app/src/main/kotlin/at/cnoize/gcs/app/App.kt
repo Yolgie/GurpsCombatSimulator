@@ -1,9 +1,10 @@
 package at.cnoize.gcs.app
 
-import at.cnoize.gcs.app.character.ActiveDefense
+import at.cnoize.gcs.app.character.ActiveDefenseOption
 import at.cnoize.gcs.app.character.BasicAttribute
 import at.cnoize.gcs.app.character.Character
 import at.cnoize.gcs.app.character.CharacterState
+import at.cnoize.gcs.app.character.maxOrNull
 import at.cnoize.gcs.app.character.skills.Skill
 import at.cnoize.gcs.app.weapons.ActiveWeapon
 import at.cnoize.gcs.app.weapons.Weapon
@@ -28,14 +29,14 @@ fun main() {
         skills = mapOf(Skill.AxeMace to 12)
     )
         .getInitialPlayerState()
-        .copy(weapons = listOf(axe), activeWeapons = listOf(ActiveWeapon(axe, Ready)))
+        .copy(weapons = listOf(axe), activeWeapons = listOf(ActiveWeapon(axe, Ready, Skill.AxeMace)))
     val playerTwo = Character(
         "Player 2",
         attributes = mapOf(BasicAttribute.ST to 12),
         skills = mapOf(Skill.AxeMace to 11)
     )
         .getInitialPlayerState()
-        .copy(weapons = listOf(axe), activeWeapons = listOf(ActiveWeapon(axe, Ready)))
+        .copy(weapons = listOf(axe), activeWeapons = listOf(ActiveWeapon(axe, Ready, Skill.AxeMace)))
 
     val combatPairingFirstRound = CombatPairing(attacker = playerOne, defender = playerTwo)
 
@@ -47,7 +48,7 @@ fun main() {
                     combatPairing.attacker.weapons.first(),
                     combatPairing.attacker.weapons.first().modes.first()
                 ),
-                { _, _ -> ActiveDefense.Dodge }
+                { _, _, options -> options.maxOrNull() }
             )
             return@generateSequence result.switch()
         }
@@ -76,7 +77,7 @@ data class AttackAction(val weapon: Weapon, val weaponMode: WeaponMode)
 fun attack(
     combatPairing: CombatPairing,
     attackAction: AttackAction,
-    activeDefenseDecision: (CombatPairing, AttackAction) -> ActiveDefense
+    activeDefenseDecision: (CombatPairing, AttackAction, List<ActiveDefenseOption>) -> ActiveDefenseOption?
 ): CombatPairing {
     val attacker = combatPairing.attacker
     var defender = combatPairing.defender
@@ -93,14 +94,23 @@ fun attack(
 
     if (attackSuccess) {
         val defenseRoll = Dice().roll()
-        val activeDefense = activeDefenseDecision.invoke(CombatPairing(attacker, defender), attackAction)
-        val defenseTarget = defender.getActiveDefense(activeDefense)
-            ?: throw IllegalStateException("we assume that the chosen active defense always is possible")
-        val defenseSuccess = defenseRoll <= defenseTarget
-        println(
-            "${defender.character.name} rolls $defenseRoll on $defenseTarget " +
-                    "and would ${if (!defenseSuccess) "not " else ""}defend."
+        val activeDefense = activeDefenseDecision.invoke(
+            CombatPairing(attacker, defender),
+            attackAction,
+            defender.getActiveDefenseOptions()
         )
+        val defenseSuccess = if (activeDefense != null) {
+            val defenseSuccess = defenseRoll <= activeDefense.defenseValue
+            println(
+                "${defender.character.name} rolls $defenseRoll " +
+                        "on ${activeDefense.activeDefenseType} ${activeDefense.defenseValue} " +
+                        "and would ${if (!defenseSuccess) "not " else ""}defend."
+            )
+            defenseSuccess
+        } else {
+            println("${defender.character.name} does not defend.")
+            false
+        }
 
         if (!defenseSuccess) {
             // add validation that the weapon mode is possible (weapon active)

@@ -3,10 +3,12 @@
 [![GitHub Super-Linter](https://github.com/yolgie/GurpsCombatSimulator/workflows/Github%20Super%20Linter/badge.svg?branch=main)](https://github.com/marketplace/actions/super-linter)
 ![Gradle Build](https://github.com/yolgie/GurpsCombatSimulator/workflows/Gradle%20Build/badge.svg?branch=main)
 
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Yolgie_GurpsCombatSimulator&metric=bugs)](https://sonarcloud.io/dashboard?id=Yolgie_GurpsCombatSimulator)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Yolgie_GurpsCombatSimulator&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=Yolgie_GurpsCombatSimulator)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Yolgie_GurpsCombatSimulator&metric=code_smells)](https://sonarcloud.io/dashboard?id=Yolgie_GurpsCombatSimulator)
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=Yolgie_GurpsCombatSimulator&metric=sqale_index)](https://sonarcloud.io/dashboard?id=Yolgie_GurpsCombatSimulator)  
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=GurpsCombatSimulator&metric=alert_status)](https://sonarcloud.io/dashboard?id=GurpsCombatSimulator)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=GurpsCombatSimulator&metric=bugs)](https://sonarcloud.io/dashboard?id=GurpsCombatSimulator)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=GurpsCombatSimulator&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=GurpsCombatSimulator)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=GurpsCombatSimulator&metric=code_smells)](https://sonarcloud.io/dashboard?id=GurpsCombatSimulator)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=GurpsCombatSimulator&metric=coverage)](https://sonarcloud.io/dashboard?id=GurpsCombatSimulator)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=GurpsCombatSimulator&metric=sqale_index)](https://sonarcloud.io/dashboard?id=GurpsCombatSimulator)  
 
 ## Idea
 * Simulate GURPS combat and generate a neural net to test and simulate

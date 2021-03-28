@@ -20,7 +20,17 @@ val mace = Weapon(
 )
 val pick = Weapon(
     "Pick",
-    listOf(
-        WeaponMode(MeleeDamage(AttackMode.Swing, +1), DamageMode.Impaling, Skill.AxeMace)
-    )
+    WeaponMode(MeleeDamage(AttackMode.Swing, +1), DamageMode.Impaling, Skill.AxeMace)
+)
+
+val smallShield = Weapon(
+    "Small Shield",
+    WeaponMode(MeleeDamage(AttackMode.Thrust), DamageMode.Crushing, Skill.Shield),
+    ShieldMode(1, Skill.Shield)
+)
+
+val mediumShield = Weapon(
+    "Medium Shield",
+    WeaponMode(MeleeDamage(AttackMode.Thrust), DamageMode.Crushing, Skill.Shield),
+    ShieldMode(2, Skill.Shield)
 )

@@ -4,6 +4,7 @@ import at.cnoize.gcs.app.character.ActiveDefenseOption
 import at.cnoize.gcs.app.character.ActiveDefenseType
 import at.cnoize.gcs.app.character.Block
 import at.cnoize.gcs.app.character.Character
+import at.cnoize.gcs.app.character.CharacterState
 import at.cnoize.gcs.app.character.Dodge
 import at.cnoize.gcs.app.character.Parry
 import at.cnoize.gcs.app.character.SecondaryCharacteristic
@@ -110,7 +111,7 @@ class ActiveDefenseTest {
             dynamicTest("expecting character with weapon skill $skillValue to have a parry of $expectedParry") {
                 val activeWeapon = ActiveWeapon(simpleWeapon)
                 val character = Character("Warrior", skills = mapOf(skill to skillValue))
-                    .getInitialPlayerState().copy(activeWeapons = listOf(activeWeapon))
+                    .getInitialPlayerState().copy(weapons = listOf(simpleWeapon), activeWeapons = listOf(activeWeapon))
                 assertEquals(expectedParry, Parry(character, activeWeapon).getActiveDefenseValue())
             }
         }
@@ -177,7 +178,7 @@ class ActiveDefenseTest {
                 assertEquals(1, smallShield.shieldMode!!.defenseBonus)
                 val activeShield = ActiveWeapon(smallShield)
                 val character = Character("Coward", skills = mapOf(activeShield.usedSkill to skillValue))
-                    .getInitialPlayerState().copy(activeWeapons = listOf(activeShield))
+                    .getInitialPlayerState().copy(weapons = listOf(smallShield), activeWeapons = listOf(activeShield))
                 assertEquals(expectedBlock, Block(character, activeShield).getActiveDefenseValue())
             }
         }
@@ -207,7 +208,7 @@ class ActiveDefenseTest {
             val exception = assertThrows<IllegalArgumentException> {
                 Block(character, ActiveWeapon(axe, usedSkill = Skill.AxeMace))
             }
-            assertNotNull(exception.message) { "missing shield should throw with message" }
+            assertNotNull(exception.message, "missing shield should throw with message")
             assert(exception.message!!.contains("missing shield mode")) { "you should not be able to block without a shield" }
         }
 

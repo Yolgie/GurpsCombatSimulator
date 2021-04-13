@@ -46,11 +46,7 @@ data class Character(
     }
 
     fun getInitialPlayerState(): CharacterState {
-        return CharacterState(
-            this,
-            get(SecondaryCharacteristic.HP),
-            get(SecondaryCharacteristic.FP)
-        )
+        return CharacterState(this)
     }
 
     companion object {

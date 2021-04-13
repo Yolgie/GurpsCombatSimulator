@@ -4,7 +4,6 @@ import at.cnoize.gcs.app.character.ActiveDefenseOption
 import at.cnoize.gcs.app.character.ActiveDefenseType
 import at.cnoize.gcs.app.character.Block
 import at.cnoize.gcs.app.character.Character
-import at.cnoize.gcs.app.character.CharacterState
 import at.cnoize.gcs.app.character.Dodge
 import at.cnoize.gcs.app.character.Parry
 import at.cnoize.gcs.app.character.SecondaryCharacteristic

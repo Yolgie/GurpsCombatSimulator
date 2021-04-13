@@ -8,8 +8,7 @@ data class Weapon(
     val modes: Collection<WeaponMode> = emptyList(),
     val shieldMode: ShieldMode? = null
 ) {
-    constructor(name: String, mode: WeaponMode, shieldMode: ShieldMode? = null)
-            : this(name, listOf(mode), shieldMode)
+    constructor(name: String, mode: WeaponMode, shieldMode: ShieldMode? = null) : this(name, listOf(mode), shieldMode)
 }
 
 data class ActiveWeapon(
@@ -17,13 +16,12 @@ data class ActiveWeapon(
     val state: WeaponState = WeaponState.Ready,
     val usedSkill: Skill
 ) {
-    constructor(weapon: Weapon, state: WeaponState = WeaponState.Ready) :
-            this(
-                weapon,
-                state,
-                weapon.modes.map(WeaponMode::skill).toSingleOrNull()
-                    ?: throw IllegalArgumentException("Cannot deduct weapon skill, please specify.")
-            )
+    constructor(weapon: Weapon, state: WeaponState = WeaponState.Ready) : this(
+        weapon,
+        state,
+        weapon.modes.map(WeaponMode::skill).toSingleOrNull()
+            ?: throw IllegalArgumentException("Cannot deduct weapon skill, please specify.")
+    )
 }
 
 data class ShieldMode(

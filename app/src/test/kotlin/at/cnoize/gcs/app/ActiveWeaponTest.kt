@@ -26,7 +26,8 @@ class ActiveWeaponTest {
     @Test
     fun `test autodetecting skill for weapon with same skill in weapon modes`() {
         val multiuseWeapon = Weapon(
-            "simple weapon", listOf(
+            "multiuse weapon",
+            listOf(
                 WeaponMode(MeleeDamage(AttackMode.Swing, +0), DamageMode.Cutting, Skill.AxeMace),
                 WeaponMode(MeleeDamage(AttackMode.Thrust, +2), DamageMode.Impaling, Skill.AxeMace),
                 WeaponMode(MeleeDamage(AttackMode.Swing, -1), DamageMode.Crushing, Skill.AxeMace),
@@ -40,14 +41,15 @@ class ActiveWeaponTest {
 
     @Test
     fun `can not autodetect skill for weapon with different skills in weapon modes`() {
-        val versitileWeapon = Weapon(
-            "simple weapon", listOf(
+        val versatileWeapon = Weapon(
+            "versatile weapon",
+            listOf(
                 WeaponMode(MeleeDamage(AttackMode.Swing, +0), DamageMode.Crushing, Skill.AxeMace),
                 WeaponMode(MeleeDamage(AttackMode.Thrust, +2), DamageMode.Impaling, Skill.AxeMace),
                 WeaponMode(MeleeDamage(AttackMode.Swing, -1), DamageMode.Cutting, Skill.Broadsword),
             )
         )
 
-        assertThrows<IllegalArgumentException> { ActiveWeapon(versitileWeapon) }
+        assertThrows<IllegalArgumentException> { ActiveWeapon(versatileWeapon) }
     }
 }

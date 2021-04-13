@@ -57,4 +57,3 @@ data class Character(
         const val defaultAttributeLevel = 10
     }
 }
-

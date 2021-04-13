@@ -34,7 +34,5 @@ class WeaponModeTest {
 
             assertEquals(expectedDamageDice, result)
         }
-
-
     }
 }

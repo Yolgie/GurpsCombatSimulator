@@ -9,6 +9,11 @@ data class Weapon(
     val shieldMode: ShieldMode? = null
 ) {
     constructor(name: String, mode: WeaponMode, shieldMode: ShieldMode? = null) : this(name, listOf(mode), shieldMode)
+    constructor(name: String, shieldMode: ShieldMode) : this(name, emptyList(), shieldMode)
+
+    init {
+        require(modes.isNotEmpty() || shieldMode != null) { "Weapon has to have at least one mode" }
+    }
 }
 
 data class ActiveWeapon(
@@ -19,7 +24,9 @@ data class ActiveWeapon(
     constructor(weapon: Weapon, state: WeaponState = WeaponState.Ready) : this(
         weapon,
         state,
-        weapon.modes.map(WeaponMode::skill).toSingleOrNull()
+        (weapon.modes.map(WeaponMode::skill) + weapon.shieldMode?.skill)
+            .filterNotNull()
+            .toSingleOrNull()
             ?: throw IllegalArgumentException("Cannot deduct weapon skill, please specify.")
     )
 }

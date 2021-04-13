@@ -13,13 +13,16 @@ import at.cnoize.gcs.app.weapons.ActiveWeapon
 import at.cnoize.gcs.app.weapons.AttackMode
 import at.cnoize.gcs.app.weapons.DamageMode
 import at.cnoize.gcs.app.weapons.MeleeDamage
+import at.cnoize.gcs.app.weapons.ShieldMode
 import at.cnoize.gcs.app.weapons.Weapon
 import at.cnoize.gcs.app.weapons.WeaponMode
+import at.cnoize.gcs.app.weapons.axe
 import at.cnoize.gcs.app.weapons.smallShield
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
+import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -120,19 +123,6 @@ class ActiveDefenseTest {
         }
 
         @Test
-        fun `test mapper to ActiveDefenseOption gives null when no weapon skill is found`() {
-            val character = Character("Bob", skills = mapOf(skill to 10)).getInitialPlayerState()
-            val weaponWithNoDefaultSkill = Weapon(
-                "weapon with no default",
-                WeaponMode(MeleeDamage(AttackMode.Thrust, -1), DamageMode.Crushing, Skill.Bolas)
-            )
-            val activeDefense = Parry(character, ActiveWeapon(weaponWithNoDefaultSkill))
-            val activeDefenseOption = activeDefense.toActiveDefenseOption()
-
-            assertNull(activeDefenseOption, "you should not be able to parry without skill")
-        }
-
-        @Test
         fun `test mapper to ActiveDefenseOption`() {
             val character = Character("Bob", skills = mapOf(skill to 10)).getInitialPlayerState()
             val activeDefense = Parry(character, ActiveWeapon(simpleWeapon))
@@ -142,6 +132,30 @@ class ActiveDefenseTest {
             assertEquals(activeDefense.getActiveDefenseValue(), activeDefenseOption?.defenseValue)
             assertEquals(character.getDefenseBonus(), activeDefenseOption?.includedDefenseBonus)
             assertEquals(activeDefense.weapon, activeDefenseOption?.activeWeapon)
+        }
+
+        @Test
+        fun `test mapper to ActiveDefenseOption with weapon without weapon mode`() {
+            val character = Character("Bob", skills = mapOf(skill to 10)).getInitialPlayerState()
+            val shield = Weapon("Weapon without weapon mode", shieldMode = ShieldMode(1, skill))
+            val exception = assertThrows<IllegalArgumentException> {
+                Parry(character, ActiveWeapon(shield))
+            }
+            assertNotNull(exception.message) { "missing weapon mode should throw with message" }
+            assert(exception.message!!.contains("missing weapon mode")) { "you should not be able to parry without a weapon" }
+        }
+
+        @Test
+        fun `test mapper to ActiveDefenseOption gives null when no weapon skill is found`() {
+            val character = Character("Bob").getInitialPlayerState()
+            val weaponWithNoDefaultSkill = Weapon(
+                "weapon with no default",
+                WeaponMode(MeleeDamage(AttackMode.Thrust, -1), DamageMode.Crushing, Skill.Bolas)
+            )
+            val activeDefense = Parry(character, ActiveWeapon(weaponWithNoDefaultSkill))
+            val activeDefenseOption = activeDefense.toActiveDefenseOption()
+
+            assertNull(activeDefenseOption, "you should not be able to parry without skill")
         }
     }
 
@@ -185,6 +199,26 @@ class ActiveDefenseTest {
             assertEquals(activeDefense.getActiveDefenseValue(), activeDefenseOption?.defenseValue)
             assertEquals(smallShield.shieldMode!!.defenseBonus, activeDefenseOption?.includedDefenseBonus)
             assertEquals(activeDefense.shield, activeDefenseOption?.activeWeapon)
+        }
+
+        @Test
+        fun `test mapper to ActiveDefenseOption with weapon instead of shield`() {
+            val character = Character("Shield Wielder", skills = mapOf(Skill.Shield to 10)).getInitialPlayerState()
+            val exception = assertThrows<IllegalArgumentException> {
+                Block(character, ActiveWeapon(axe, usedSkill = Skill.AxeMace))
+            }
+            assertNotNull(exception.message) { "missing shield should throw with message" }
+            assert(exception.message!!.contains("missing shield mode")) { "you should not be able to block without a shield" }
+        }
+
+        @Test
+        fun `test mapper to ActiveDefenseOption gives null when no shield skill is found`() {
+            val character = Character("Shield Wielder").getInitialPlayerState()
+            val shieldWithNoDefaultSkill = Weapon("shield with no default", ShieldMode(1, Skill.Bolas))
+            val activeDefense = Block(character, ActiveWeapon(shieldWithNoDefaultSkill))
+            val activeDefenseOption = activeDefense.toActiveDefenseOption()
+
+            assertNull(activeDefenseOption, "you should not be able to block without skill")
         }
     }
 

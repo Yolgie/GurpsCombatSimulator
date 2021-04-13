@@ -35,6 +35,10 @@ class Dodge(override val characterState: CharacterState) : ActiveDefense {
 class Parry(override val characterState: CharacterState, val weapon: ActiveWeapon) : ActiveDefense {
     override val activeDefenseType = ActiveDefenseType.Parry
 
+    init {
+        require(weapon.weapon.modes.isNotEmpty()) { "Weapon can not be used to parry, missing weapon mode" }
+    }
+
     @Suppress("MagicNumber") // B376
     override fun getActiveDefenseValue(): Int? {
         val skill = characterState.character.get(weapon.usedSkill) ?: return null
@@ -57,9 +61,14 @@ class Parry(override val characterState: CharacterState, val weapon: ActiveWeapo
 class Block(override val characterState: CharacterState, val shield: ActiveWeapon) : ActiveDefense {
     override val activeDefenseType = ActiveDefenseType.Block
 
+    init {
+        requireNotNull(shield.weapon.shieldMode) { "Weapon can not be used to block, missing shield mode" }
+    }
+
     @Suppress("MagicNumber") // B375
     override fun getActiveDefenseValue(): Int? {
-        val skill = shield.weapon.shieldMode?.skill?.let { characterState.character.get(it) } ?: return null
+        requireNotNull(shield.weapon.shieldMode)
+        val skill = shield.weapon.shieldMode.skill.let { characterState.character.get(it) } ?: return null
         return skill / 2 + 3 + shield.weapon.shieldMode.defenseBonus
     }
 

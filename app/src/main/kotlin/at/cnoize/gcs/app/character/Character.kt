@@ -4,10 +4,6 @@ import at.cnoize.gcs.app.character.skills.DefaultableFrom
 import at.cnoize.gcs.app.character.skills.SKILL_DEFAULTS
 import at.cnoize.gcs.app.character.skills.Skill
 
-@Suppress(
-    "kotlin:S117", "ConstructorParameterNaming", // allow names for basic attributes
-    "MagicNumber" // allow for relative defaults
-)
 data class Character(
     val name: String,
     val attributes: Map<Attribute, Int> = emptyMap(),

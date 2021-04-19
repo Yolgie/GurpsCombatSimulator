@@ -8,11 +8,16 @@ data class Weapon(
     val weaponModes: Collection<WeaponMode> = emptyList(),
     val shieldMode: ShieldMode? = null
 ) {
-    constructor(name: String, weaponMode: WeaponMode, shieldMode: ShieldMode? = null)
-            : this(name, listOf(weaponMode), shieldMode)
+    constructor(
+        name: String,
+        weaponMode: WeaponMode,
+        shieldMode: ShieldMode? = null
+    ) : this(name, listOf(weaponMode), shieldMode)
 
-    constructor(name: String, shieldMode: ShieldMode)
-            : this(name, emptyList(), shieldMode)
+    constructor(
+        name: String,
+        shieldMode: ShieldMode
+    ) : this(name, emptyList(), shieldMode)
 
     init {
         require(weaponModes.isNotEmpty() || shieldMode != null) { "Weapon has to have at least one mode" }

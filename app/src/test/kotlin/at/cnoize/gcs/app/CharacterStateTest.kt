@@ -1,5 +1,6 @@
 package at.cnoize.gcs.app
 
+import at.cnoize.gcs.app.character.ActiveDefenseOption
 import at.cnoize.gcs.app.character.ActiveDefenseType
 import at.cnoize.gcs.app.character.Character
 import at.cnoize.gcs.app.character.CharacterState
@@ -125,9 +126,7 @@ class CharacterStateTest {
             )
 
             val activeDefenseOptions = characterState.getActiveDefenseOptions()
-            val dodge = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Dodge }
-            val parry = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Parry }
-            val block = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Block }
+            val (dodge, parry, block) = splitDefenseOptions(activeDefenseOptions)
 
             assertNotNull(dodge.toSingleOrNull(), "everybody can dodge")
             assertTrue(parry.isEmpty(), "no parry with only shields")
@@ -143,9 +142,7 @@ class CharacterStateTest {
             )
 
             val activeDefenseOptions = characterState.getActiveDefenseOptions()
-            val dodge = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Dodge }
-            val parry = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Parry }
-            val block = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Block }
+            val (dodge, parry, block) = splitDefenseOptions(activeDefenseOptions)
 
             assertNotNull(dodge.toSingleOrNull(), "everybody can dodge")
             assertTrue(block.isEmpty(), "no block without shields")
@@ -165,14 +162,19 @@ class CharacterStateTest {
             )
 
             val activeDefenseOptions = characterState.getActiveDefenseOptions()
-            val dodge = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Dodge }
-            val parry = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Parry }
-            val block = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Block }
+            val (dodge, parry, block) = splitDefenseOptions(activeDefenseOptions)
 
             assertNotNull(dodge.toSingleOrNull(), "everybody can dodge")
             assertTrue(block.isNotEmpty(), "can block shields")
             assertTrue(parry.isNotEmpty(), "can parry with weapons")
             assertTrue(parry.size == 2, "can parry with all weapons")
+        }
+
+        private fun splitDefenseOptions(activeDefenseOptions: List<ActiveDefenseOption>): Triple<List<ActiveDefenseOption>, List<ActiveDefenseOption>, List<ActiveDefenseOption>> {
+            val dodge = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Dodge }
+            val parry = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Parry }
+            val block = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Block }
+            return Triple(dodge, parry, block)
         }
     }
 }

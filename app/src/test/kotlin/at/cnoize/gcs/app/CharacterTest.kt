@@ -53,7 +53,7 @@ class CharacterTest {
         assertEquals(Character.defaultAttributeLevel, basicCharacter.get(defaultFromCharacteristic))
         assertEquals(Character.defaultAttributeLevel, basicCharacter.get(defaultFromSkillDirectly))
         assertEquals(null, basicCharacter.get(defaultFromSkillWithoutDefault))
-        assertEquals(Character.defaultAttributeLevel-4, basicCharacter.get(defaultFromSkillFromAnotherSkill))
+        assertEquals(Character.defaultAttributeLevel - 4, basicCharacter.get(defaultFromSkillFromAnotherSkill))
     }
 
     @Test

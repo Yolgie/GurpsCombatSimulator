@@ -20,6 +20,11 @@ data class CharacterState(
         activeWeapons: List<ActiveWeapon> = emptyList()
     ) : this(character, hp, fp, encumbrance, activeWeapons.map(ActiveWeapon::weapon), activeWeapons)
 
+    private val activeWeaponsWithShieldMode =
+        activeWeapons.filter { it.weapon.shieldMode != null }
+    private val activeWeaponsWithWeaponModes =
+        activeWeapons.filter { it.weapon.weaponModes.isNotEmpty() && it.weapon.shieldMode == null }
+
     init {
         require(
             weapons.containsAll(activeWeapons.map(ActiveWeapon::weapon))
@@ -27,16 +32,16 @@ data class CharacterState(
     }
 
     fun getDefenseBonus(): Int {
-        return activeWeapons
-            .mapNotNull { activeWeapon -> activeWeapon.weapon.shieldMode?.defenseBonus }
+        return activeWeaponsWithShieldMode
+            .mapNotNull { shield -> shield.weapon.shieldMode?.defenseBonus }
             .maxOrNull() ?: 0
     }
 
     fun getActiveDefenseOptions(): List<ActiveDefenseOption> {
         val activeDefenseOptions = mutableListOf<ActiveDefense>()
         activeDefenseOptions.add(Dodge(this))
-        activeDefenseOptions.addAll(activeWeapons.map { Parry(this, it) })
-        activeDefenseOptions.addAll(activeWeapons.map { Block(this, it) })
+        activeDefenseOptions.addAll(activeWeaponsWithWeaponModes.map { Parry(this, it) })
+        activeDefenseOptions.addAll(activeWeaponsWithShieldMode.map { Block(this, it) })
 
         return activeDefenseOptions.mapNotNull { it.toActiveDefenseOption() }
     }

@@ -36,7 +36,7 @@ class Parry(override val characterState: CharacterState, val weapon: ActiveWeapo
     override val activeDefenseType = ActiveDefenseType.Parry
 
     init {
-        require(weapon.weapon.modes.isNotEmpty()) { "Weapon can not be used to parry, missing weapon mode" }
+        require(weapon.weapon.weaponModes.isNotEmpty()) { "Weapon can not be used to parry, missing weapon mode" }
     }
 
     @Suppress("MagicNumber") // B376

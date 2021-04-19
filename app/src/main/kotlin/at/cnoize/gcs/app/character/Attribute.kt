@@ -6,9 +6,9 @@ import at.cnoize.gcs.app.character.BasicAttribute.DX
 import at.cnoize.gcs.app.character.BasicAttribute.HT
 import at.cnoize.gcs.app.character.BasicAttribute.IQ
 import at.cnoize.gcs.app.character.BasicAttribute.ST
-import at.cnoize.gcs.app.character.skills.DefaultFrom
+import at.cnoize.gcs.app.character.skills.DefaultableFrom
 
-interface Attribute : DefaultFrom
+interface Attribute : DefaultableFrom
 
 enum class BasicAttribute : Attribute {
     ST,

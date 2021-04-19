@@ -46,7 +46,7 @@ fun main() {
                 combatPairing,
                 AttackAction(
                     combatPairing.attacker.weapons.first(),
-                    combatPairing.attacker.weapons.first().modes.first()
+                    combatPairing.attacker.weapons.first().weaponModes.first()
                 ),
                 { _, _, options -> options.maxOrNull() }
             )

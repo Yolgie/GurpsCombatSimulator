@@ -4,8 +4,13 @@ import at.cnoize.gcs.app.character.ActiveDefenseType
 import at.cnoize.gcs.app.character.Character
 import at.cnoize.gcs.app.character.CharacterState
 import at.cnoize.gcs.app.character.SecondaryCharacteristic
+import at.cnoize.gcs.app.character.skills.Skill
 import at.cnoize.gcs.app.weapons.ActiveWeapon
+import at.cnoize.gcs.app.weapons.axe
+import at.cnoize.gcs.app.weapons.heavyCloak
+import at.cnoize.gcs.app.weapons.lightCloak
 import at.cnoize.gcs.app.weapons.mediumShield
+import at.cnoize.gcs.app.weapons.pick
 import at.cnoize.gcs.app.weapons.smallShield
 import at.cnoize.util.toSingleOrNull
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -110,6 +115,64 @@ class CharacterStateTest {
 
             assertNotNull(activeDefenseOptions.toSingleOrNull(), "minimal characters can only dodge")
             assertEquals(ActiveDefenseType.Dodge, activeDefenseOptions.singleOrNull()?.activeDefenseType)
+        }
+
+        @Test
+        fun `test active defenses with only shields`() {
+            val characterState = CharacterState(
+                Character("John"),
+                activeWeapons = listOf(ActiveWeapon(lightCloak), ActiveWeapon(heavyCloak))
+            )
+
+            val activeDefenseOptions = characterState.getActiveDefenseOptions()
+            val dodge = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Dodge }
+            val parry = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Parry }
+            val block = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Block }
+
+            assertNotNull(dodge.toSingleOrNull(), "everybody can dodge")
+            assertTrue(parry.isEmpty(), "no parry with only shields")
+            assertTrue(block.isNotEmpty(), "can block with shields")
+            assertTrue(block.size == 2, "can block with all shields")
+        }
+
+        @Test
+        fun `test active defenses with only weapons`() {
+            val characterState = CharacterState(
+                Character("John"),
+                activeWeapons = listOf(ActiveWeapon(pick), ActiveWeapon(axe, usedSkill = Skill.AxeMace))
+            )
+
+            val activeDefenseOptions = characterState.getActiveDefenseOptions()
+            val dodge = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Dodge }
+            val parry = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Parry }
+            val block = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Block }
+
+            assertNotNull(dodge.toSingleOrNull(), "everybody can dodge")
+            assertTrue(block.isEmpty(), "no block without shields")
+            assertTrue(parry.isNotEmpty(), "can parry with weapons")
+            assertTrue(parry.size == 2, "can parry with all weapons")
+        }
+
+        @Test
+        fun `test active defenses with everything`() {
+            val characterState = CharacterState(
+                Character("John"),
+                activeWeapons = listOf(
+                    ActiveWeapon(pick),
+                    ActiveWeapon(axe, usedSkill = Skill.AxeMace),
+                    ActiveWeapon(mediumShield)
+                )
+            )
+
+            val activeDefenseOptions = characterState.getActiveDefenseOptions()
+            val dodge = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Dodge }
+            val parry = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Parry }
+            val block = activeDefenseOptions.filter { it.activeDefenseType == ActiveDefenseType.Block }
+
+            assertNotNull(dodge.toSingleOrNull(), "everybody can dodge")
+            assertTrue(block.isNotEmpty(), "can block shields")
+            assertTrue(parry.isNotEmpty(), "can parry with weapons")
+            assertTrue(parry.size == 2, "can parry with all weapons")
         }
     }
 }

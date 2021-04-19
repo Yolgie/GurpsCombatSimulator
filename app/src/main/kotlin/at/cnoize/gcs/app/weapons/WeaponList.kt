@@ -34,3 +34,13 @@ val mediumShield = Weapon(
     WeaponMode(MeleeDamage(AttackMode.Thrust), DamageMode.Crushing, Skill.Shield),
     ShieldMode(2, Skill.Shield)
 )
+
+val lightCloak = Weapon(
+    "Light Cloak",
+    shieldMode = ShieldMode(1, Skill.Cloak)
+)
+
+val heavyCloak = Weapon(
+    "Heavy Cloak",
+    shieldMode = ShieldMode(2, Skill.Cloak)
+)

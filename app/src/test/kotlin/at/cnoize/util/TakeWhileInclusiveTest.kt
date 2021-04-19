@@ -5,9 +5,9 @@ import kotlin.test.assertEquals
 
 class TakeWhileInclusiveTest {
 
-    val data = listOf(0, 1, 2, 3, 4, 5)
-    val predicateElement = 3 // this will result in the list containing the first element where the condition fails -> 3
-    val expectedList = listOf(0, 1, 2, 3)
+    private val data = listOf(0, 1, 2, 3, 4, 5)
+    private val predicateElement = 3 // this will result in the list containing the first element where the condition fails -> 3
+    private val expectedList = listOf(0, 1, 2, 3)
 
     @Test
     fun `test takeWhileInclusive TypedArray`() {

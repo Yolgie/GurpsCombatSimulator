@@ -5,7 +5,7 @@ plugins {
     jacoco
 
     id("org.sonarqube") version "3.1.1"
-    id("io.gitlab.arturbosch.detekt") version "1.16.0"
+    id("io.gitlab.arturbosch.detekt") version "1.17.1"
 }
 
 repositories {
@@ -20,7 +20,7 @@ dependencies {
     testImplementation(kotlin("test-junit5"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.1")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.7.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.7.2")
     testImplementation("io.mockk:mockk:1.11.0")
 }
 

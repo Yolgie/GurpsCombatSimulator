@@ -4,7 +4,7 @@ plugins {
     idea
     jacoco
 
-    id("org.sonarqube") version "3.1.1"
+    id("org.sonarqube") version "3.5.0.2730"
     id("io.gitlab.arturbosch.detekt") version "1.17.1"
 }
 
